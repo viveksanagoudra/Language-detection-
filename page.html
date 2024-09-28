@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://cdn-icons-png.freepik.com/512/7429/7429665.png" height="5000px" width="5000px" rel="icon">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Language Recognizer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            position: relative;
+            flex-direction: column; /* Adjust to allow vertical alignment of header and form */
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 20px; /* Adjust padding as needed */
+        }
+        .header img {
+            margin-right: 10px; /* Space between image and title */
+        }
+        .title {
+            font-family: sans-serif;
+            color: #747476;
+            font-size: 24px;
+            margin: 0;
+        }
+        .main-container {
+            display: flex;
+            margin-top: 100px; /* Adjust to position the form below the header */
+            justify-content: center;
+            align-items: flex-start;
+            gap: 20px;
+        }
+        .container {
+            background-color: #edf8fa;
+            padding: 10px;
+            border-radius: 10px;
+            border-style: solid;
+            border-color: #d6d6d6;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-right: 20px; /* Space between input and output containers */
+        }
+        .input-box, .output-box {
+            font-family: sans-serif;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            resize: none;
+            padding: 5px 170px;
+            text-align: center;
+        }
+        .input-box {
+            width: calc(100% - 344px);
+            height: calc(270px - 60px);
+        }
+        .output-box {
+            padding-top: 120px;
+            width: calc(100% - 344px);
+            height: calc(213px - 60px);
+        }
+        .translate-button, .percentage-button {
+            padding: 10px 20px;
+            background-color: #3482ff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            display: block;
+            width: 100%;
+            margin: 10px 0;
+        }
+        .translate-button:hover, .percentage-button:hover {
+            background-color: #6ca0f5;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelector('.translate-button').addEventListener('click', function (event) {
+                event.preventDefault();
+                const inputText = document.getElementById('input-text').value;
+
+                fetch('/predict', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ text: inputText })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.language) {
+                        document.getElementById('output-text').value = `Predicted Language: ${data.language}`;
+                    } else if (data.error) {
+                        document.getElementById('output-text').value = `Error: ${data.error}`;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    document.getElementById('output-text').value = 'An error occurred.';
+                });
+            });
+
+            document.querySelector('.percentage-button').addEventListener('click', function (event) {
+                event.preventDefault();
+                const inputText = document.getElementById('input-text').value;
+
+                fetch('/predict_percentages', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ text: inputText })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        document.getElementById('output-text').value = `Error: ${data.error}`;
+                    } else {
+                        let resultText = 'Language Percentages:\n';
+                        for (const [language, percentage] of Object.entries(data)) {
+                            resultText += `${language}: ${percentage}%\n`;
+                        }
+                        document.getElementById('output-text').value = resultText;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    document.getElementById('output-text').value = 'An error occurred.';
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="header">
+        <img src="https://cdn-icons-png.flaticon.com/256/3898/3898082.png" alt="Icon" height="80px" width="80px">
+        <h1 class="title">Language Recognizer</h1>
+    </div>
+    <div class="main-container">
+        <div class="container">
+            <form id="translate">
+                <textarea id="input-text" class="input-box" placeholder="Enter text to recognize..."></textarea>
+                <button type="button" class="translate-button">Predict Language</button>
+                <button type="button" class="percentage-button">Get Language Percentages</button>
+            </form>
+        </div>
+        <div class="container">
+            <textarea id="output-text" class="output-box" placeholder="Results will be displayed here" readonly></textarea>
+        </div>
+    </div>
+</body>
+</html>

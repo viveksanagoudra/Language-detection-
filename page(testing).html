@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://cdn-icons-png.freepik.com/512/7429/7429665.png" height="5000px" width="5000px" rel="icon">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Language Recognizer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            position: relative;
+            flex-direction: column; /* Adjust to allow vertical alignment of header and form */
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 20px; /* Adjust padding as needed */
+        }
+        .header img {
+            margin-right: 10px; /* Space between image and title */
+        }
+        .title {
+            font-family: sans-serif;
+            color: #747476;
+            font-size: 24px;
+            margin: 0;
+        }
+        .main-container {
+            display: flex;
+            margin-top: 100px; /* Adjust to position the form below the header */
+            justify-content: center;
+            align-items: flex-start;
+            gap: 20px;
+        }
+        .container {
+            background-color: #edf8fa;
+            padding: 10px;
+            border-radius: 10px;
+            border-style: solid;
+            border-color: #d6d6d6;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-right: 20px; /* Space between input and output containers */
+        }
+        .input-box, .output-box {
+            font-family: sans-serif;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            resize: none;
+            padding: 5px 170px;
+            text-align: center;
+
+        }
+        .input-box{
+            padding-top: 130px;
+            width: calc(100% - 344px);
+            height: calc(170px - 60px)
+        }
+        .output-box{
+            padding-top: 120px;
+            width: calc(100% - 344px);
+            height: calc(238px - 60px)
+        }
+        .translate-button {
+            padding: 10px 20px;
+            background-color: #3482ff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            display: block;
+            width: 100%;
+            margin: 10px 0;
+        }
+        .translate-button:hover {
+            background-color: #6ca0f5;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="https://cdn-icons-png.flaticon.com/256/3898/3898082.png" alt="Icon" height="80px" width="80px">
+        <h1 class="title">Language Recognizer</h1>
+    </div>
+    <div class="main-container">
+        <div class="container">
+            <form action="/predict" id="translate" method="post">
+                <textarea id="input-text" class="input-box" placeholder="Enter text to recognize..."></textarea>
+                <button type="button" class="translate-button">Recognize</button>
+            </form>
+        </div>
+        <div class="container">
+            <form action="/display" id="output" method="get">
+                <textarea id="output-text" class="output-box" placeholder="Language will be displayed here" readonly></textarea>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
