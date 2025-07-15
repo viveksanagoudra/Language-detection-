@@ -12,7 +12,7 @@ from collections import Counter
 app = Flask(__name__)
 
 # Load dataset
-raw = pd.read_csv(r"C:\Users\vivek\Documents\MINI_PROJECT[1]\MINI PROJECT\templates\dataset.csv")
+raw = pd.read_csv("dataset.csv")
 
 # Split dataset
 X = raw['Text']
